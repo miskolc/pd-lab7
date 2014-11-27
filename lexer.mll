@@ -51,7 +51,7 @@ rule token = parse
   | ')'            { RPAREN }
   | ":="           { ASGNOP }
   | ';'            { SEQ }
- | '!'            { DEREF }
+  | '!'            { DEREF }
   | ['A'-'Z' 'a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_'] * as id
                    { try Hashtbl.find keyword_table id 
                      with Not_found -> LOC(id)}
