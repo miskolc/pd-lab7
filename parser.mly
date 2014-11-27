@@ -22,6 +22,7 @@ let parseError loc = raise (Lexer.ParseError loc)
 %token LTE
 %token ASGNOP DEREF
 %token PLUS
+%token MULT
 %token LPAREN RPAREN
 %token EOF
 %right SEQ /* lowest precedence */
@@ -29,6 +30,7 @@ let parseError loc = raise (Lexer.ParseError loc)
 %nonassoc LTE
 %right ASGNOP
 %left PLUS
+%left MULT
 %nonassoc DEREF       /* highest precedence */
 %start main             /* the entry point */
 %type <ImpAST.expr> main
@@ -43,6 +45,7 @@ expr:
   | SKIP                       { Skip (location()) }
   | LPAREN expr RPAREN         { $2 }
   | expr PLUS expr             { Op ($1,Plus,$3, location()) }
+  | expr MULT expr             { Op ($1,Mult,$3, location()) } 
   | DEREF LOC                  { Loc ($2, location()) }
   | LOC ASGNOP expr            { Atrib ($1,$3, location()) }
   | expr LTE expr              { Op ($1, Mic, $3, location()) }

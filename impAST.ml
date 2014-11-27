@@ -2,10 +2,12 @@ type locatie = string
 
 type op =
   | Plus
+  | Mult
   | Mic
 
 let string_of_op = function
   | Plus -> "+"
+  | Mult -> "*"
   | Mic -> "<="
 
 type expr =
