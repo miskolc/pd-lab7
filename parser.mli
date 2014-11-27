@@ -15,6 +15,7 @@ type token =
   | ASGNOP
   | DEREF
   | PLUS
+  | MINUS
   | MULT
   | LPAREN
   | RPAREN

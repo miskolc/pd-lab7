@@ -43,12 +43,12 @@ let keyword_table = Hashtbl.create 20
 # 44 "lexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base = 
-   "\000\000\242\255\243\255\075\000\245\255\246\255\000\000\248\255\
-    \249\255\001\000\251\255\252\255\150\000\160\000\254\255\255\255\
-    \250\255\247\255";
+   "\000\000\241\255\242\255\075\000\244\255\245\255\000\000\247\255\
+    \248\255\001\000\250\255\252\255\150\000\160\000\254\255\255\255\
+    \249\255\246\255";
   Lexing.lex_backtrk = 
-   "\255\255\255\255\255\255\011\000\255\255\255\255\013\000\255\255\
-    \255\255\013\000\255\255\255\255\002\000\013\000\255\255\255\255\
+   "\255\255\255\255\255\255\012\000\255\255\255\255\014\000\255\255\
+    \255\255\014\000\255\255\255\255\002\000\004\000\255\255\255\255\
     \255\255\255\255";
   Lexing.lex_default = 
    "\001\000\000\000\000\000\255\255\000\000\000\000\255\255\000\000\
@@ -207,59 +207,64 @@ let
 
   | 4 ->
 # 49 "lexer.mll"
-                   ( MULT )
+                   ( MINUS )
 # 212 "lexer.ml"
 
   | 5 ->
 # 50 "lexer.mll"
-                   ( LTE )
+                   ( MULT )
 # 217 "lexer.ml"
 
   | 6 ->
 # 51 "lexer.mll"
-                   ( LPAREN )
+                   ( LTE )
 # 222 "lexer.ml"
 
   | 7 ->
 # 52 "lexer.mll"
-                   ( RPAREN )
+                   ( LPAREN )
 # 227 "lexer.ml"
 
   | 8 ->
 # 53 "lexer.mll"
-                   ( ASGNOP )
+                   ( RPAREN )
 # 232 "lexer.ml"
 
   | 9 ->
 # 54 "lexer.mll"
-                   ( SEQ )
+                   ( ASGNOP )
 # 237 "lexer.ml"
 
   | 10 ->
 # 55 "lexer.mll"
-                   ( DEREF )
+                   ( SEQ )
 # 242 "lexer.ml"
 
   | 11 ->
-let
 # 56 "lexer.mll"
-                                                         id
-# 248 "lexer.ml"
-= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 57 "lexer.mll"
-                   ( try Hashtbl.find keyword_table id 
-                     with Not_found -> LOC(id))
-# 253 "lexer.ml"
+                   ( DEREF )
+# 247 "lexer.ml"
 
   | 12 ->
-# 59 "lexer.mll"
-                   ( EOF )
+let
+# 57 "lexer.mll"
+                                                         id
+# 253 "lexer.ml"
+= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
+# 58 "lexer.mll"
+                   ( try Hashtbl.find keyword_table id 
+                     with Not_found -> LOC(id))
 # 258 "lexer.ml"
 
   | 13 ->
 # 60 "lexer.mll"
-                   ( lex_error lexbuf )
+                   ( EOF )
 # 263 "lexer.ml"
+
+  | 14 ->
+# 61 "lexer.mll"
+                   ( lex_error lexbuf )
+# 268 "lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf; __ocaml_lex_token_rec lexbuf __ocaml_lex_state
 

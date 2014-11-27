@@ -24,6 +24,11 @@ let rec infertype m = function
      | (TInt, TInt) -> TInt
      | (TInt, t) -> raise (TypeError (e2, TInt, t))
      | (t,_) -> raise (TypeError (e1, TInt, t)))
+  | Op(e1,Minus,e2,_)
+    -> (match (infertype m e1, infertype m e2) with
+     | (TInt, TInt) -> TInt
+     | (TInt, t) -> raise (TypeError (e2,TInt, t))
+     | (t,_) -> raise(TypeError (e1, TInt, t)))  
   | Op(e1,Mult,e2,_)
     -> (match (infertype m e1, infertype m e2) with
      | (TInt, TInt) -> TInt

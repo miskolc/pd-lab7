@@ -22,6 +22,7 @@ let parseError loc = raise (Lexer.ParseError loc)
 %token LTE
 %token ASGNOP DEREF
 %token PLUS
+%token MINUS
 %token MULT
 %token LPAREN RPAREN
 %token EOF
@@ -30,6 +31,7 @@ let parseError loc = raise (Lexer.ParseError loc)
 %nonassoc LTE
 %right ASGNOP
 %left PLUS
+%left MINUS
 %left MULT
 %nonassoc DEREF       /* highest precedence */
 %start main             /* the entry point */
@@ -45,6 +47,7 @@ expr:
   | SKIP                       { Skip (location()) }
   | LPAREN expr RPAREN         { $2 }
   | expr PLUS expr             { Op ($1,Plus,$3, location()) }
+  | expr MINUS expr            { Op ($1,Minus,$3, location()) }
   | expr MULT expr             { Op ($1,Mult,$3, location()) } 
   | DEREF LOC                  { Loc ($2, location()) }
   | LOC ASGNOP expr            { Atrib ($1,$3, location()) }
