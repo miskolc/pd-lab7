@@ -33,6 +33,7 @@ let keyword_table = Hashtbl.create 20
    ( "then"         , THEN );
    ( "else"         , ELSE );
    ( "while"        , WHILE );
+   ( "for"          , FOR );
    ( "do"           , DO );
    ( "done"         , DONE );
    ( "true"         , TRUE );
@@ -48,6 +49,7 @@ rule token = parse
   | '+'            { PLUS }
   | '-'            { MINUS }
   | '*'            { MULT }
+  | '/'            { DIV }
   | "<="           { LTE }
   | '('            { LPAREN }
   | ')'            { RPAREN }

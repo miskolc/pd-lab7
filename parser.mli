@@ -11,12 +11,14 @@ type token =
   | WHILE
   | DO
   | DONE
+  | FOR
   | LTE
   | ASGNOP
   | DEREF
   | PLUS
   | MINUS
   | MULT
+  | DIV
   | LPAREN
   | RPAREN
   | EOF

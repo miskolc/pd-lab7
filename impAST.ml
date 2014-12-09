@@ -4,12 +4,14 @@ type op =
   | Plus
   | Minus
   | Mult
+  | Div
   | Mic
 
 let string_of_op = function
   | Plus -> "+"
   | Minus -> "-"
   | Mult -> "*"
+  | Div -> "/"
   | Mic -> "<="
 
 type expr =
@@ -21,6 +23,7 @@ type expr =
   | Secv of expr * expr * locatie
   | If of expr * expr * expr * locatie
   | While of expr * expr * locatie
+  | For of expr * expr * expr * expr * locatie
   | Skip of locatie
 
 let rec string_of_expr = function
@@ -35,6 +38,8 @@ let rec string_of_expr = function
     "if " ^ (string_of_expr e1) ^ "\nthen " ^ (string_of_expr e2) ^ "\nelse (" ^ (string_of_expr e3) ^ ")"
   | While (e1, e2,_) ->
     "while " ^ (string_of_expr e1) ^ " do \n" ^ (string_of_expr e2) ^ "\ndone"
+  | For (e1, e2, e3, e4, _) -> 
+    "for (" ^ (string_of_expr e1) ^ "; " ^ (string_of_expr e2) ^ "; " ^ (string_of_expr e3) ^ ")\n (\n" ^ (string_of_expr e4) ^ "\n)"
   | Secv (e1,e2,_) ->
     (string_of_expr e1) ^ ";\n" ^ (string_of_expr e2)
   | Skip _ -> "skip"
@@ -48,6 +53,7 @@ let location = function
   | Atrib (_,_,l) -> l
   | If (_, _, _,l) -> l
   | While (_, _,l) -> l
+  | For (_, _, _, _,l) -> l
   | Secv (_,_,l) -> l
   | Skip l -> l
 
@@ -69,6 +75,7 @@ let locations e =
           | Secv(e1,e2,_) -> locations locs (e1::e2::exps)
           | If(e1,e2,e3,_) -> locations locs (e1::e2::e3::exps)
           | While(e1,e2,_) -> locations locs (e1::e2::exps)
+          | For(e1,e2,e3,e4,_) -> locations locs (e1::e2::e3::e4::exps)
       )
     in locations [] [e]
 

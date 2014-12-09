@@ -5,6 +5,7 @@ let rec reduce = function
   | (Op(Int (n1,_),Plus,Int (n2,_),loc),s) -> Some (Int (n1+n2,loc),s)             (*Op+*)
   | (Op(Int (n1,_),Minus,Int (n2,_),loc),s) -> Some (Int (n1-n2,loc),s)             (* Op- *) 
   | (Op(Int (n1,_),Mult,Int (n2,_),loc),s) -> Some (Int (n1*n2,loc),s)             (*Op* *)
+  | (Op(Int (n1,_),Div,Int (n2,_),loc),s) -> Some (Int (n1/n2,loc),s)             (*Op* *)
   | (Op(Int (n1,_),Mic,Int (n2,_),loc),s) -> Some (Bool (n1<=n2,loc),s)            (*Op<=*)
   | (Op(Int (n1,loc1),op,e2,loc),s) ->                                        (*OpD*)
     (match reduce (e2,s) with 
@@ -30,6 +31,8 @@ let rec reduce = function
     (match reduce (e,s) with Some (e',s') -> Some (If(e',e1,e2,loc),s')
       | None -> None)
   | (While(e1,e2,loc),s) -> Some (If(e1,Secv(e2,While(e1,e2,loc),loc),Skip loc,loc),s) (*While*)
+  | (For(init,cond,incr,body,loc),s) 
+    -> Some (Secv(init, While(cond,Secv(body, incr, loc), loc),loc), s)  (*For*)
   | _ -> None                                                    (*default*)
 
 

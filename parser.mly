@@ -19,20 +19,24 @@ let parseError loc = raise (Lexer.ParseError loc)
 %token SEQ SKIP
 %token IF THEN ELSE
 %token WHILE DO DONE
+%token FOR 
 %token LTE
 %token ASGNOP DEREF
 %token PLUS
 %token MINUS
 %token MULT
+%token DIV
 %token LPAREN RPAREN
 %token EOF
 %right SEQ /* lowest precedence */
 %nonassoc IFX
+%nonassoc FORX
 %nonassoc LTE
 %right ASGNOP
 %left PLUS
 %left MINUS
 %left MULT
+%left DIV
 %nonassoc DEREF       /* highest precedence */
 %start main             /* the entry point */
 %type <ImpAST.expr> main
@@ -49,6 +53,7 @@ expr:
   | expr PLUS expr             { Op ($1,Plus,$3, location()) }
   | expr MINUS expr            { Op ($1,Minus,$3, location()) }
   | expr MULT expr             { Op ($1,Mult,$3, location()) } 
+  | expr DIV expr             { Op ($1,Div,$3, location()) } 
   | DEREF LOC                  { Loc ($2, location()) }
   | LOC ASGNOP expr            { Atrib ($1,$3, location()) }
   | expr LTE expr              { Op ($1, Mic, $3, location()) }
@@ -56,5 +61,7 @@ expr:
   | IF expr THEN expr ELSE expr %prec IFX
                                { If ($2, $4, $6, location()) }
   | WHILE expr DO expr DONE    { While ($2, $4, location()) }
+  | FOR LPAREN expr SEQ expr SEQ expr RPAREN expr %prec FORX
+                               { For ($3, $5, $7, $9, location()) }
   | error                      { parseError (location ()) }
 ;

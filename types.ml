@@ -34,6 +34,11 @@ let rec infertype m = function
      | (TInt, TInt) -> TInt
      | (TInt, t) -> raise (TypeError (e1, TInt, t))
      | (t,_) -> raise (TypeError (e1, TInt, t)))
+  | Op(e1,Div,e2,_)
+    -> (match (infertype m e1, infertype m e2) with
+     | (TInt, TInt) -> TInt
+     | (TInt, t) -> raise (TypeError (e1, TInt, t))
+     | (t,_) -> raise (TypeError (e1, TInt, t)))  
   | Op(e1,Mic,e2,_) -> (match (infertype m e1, infertype m e2) with
      | (TInt, TInt) -> TBool
      | (TInt, t) -> raise (TypeError (e2, TInt, t))
@@ -56,6 +61,13 @@ let rec infertype m = function
      | (TBool, TUnit) -> TUnit
      | (TBool, t) -> raise (TypeError (e2, TUnit, t))
      | (t,_) -> raise (TypeError (e1, TBool, t)))
+  | For (init, cond, incr, body, _) 
+    -> (match (infertype m init, infertype m cond, inference m incr, infertype m body) with
+     | (TUnit, TBool, TUnit, TUnit) -> TUnit
+     | (TUnit, TBool, TUnit, t) -> raise (TypeError (body, TUnit, t))
+     | (TUnit, TBool, t, _) -> raise (TypeError (incr, TUnit, t))
+     | (TUnit, t, _, _) -> raise (TypeError (cond, TBool, t))
+     | (t, _, _, _) -> raise (TypeError (init, TUnit, t)))
 
 
 let type_check m e = try
